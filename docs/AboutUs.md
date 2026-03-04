@@ -11,7 +11,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ### Minh Duc
 
-<img src="images/minhduc.png" width="200px">
+<img src="images/vuminhducvmd.png" width="200px">
 
 [[github](https://github.com/vuminhducvmd)]
 
