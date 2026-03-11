@@ -2,11 +2,10 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_JC;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_GROUP1;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_JC;
+import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_JC;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_GROUP1;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_JC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
