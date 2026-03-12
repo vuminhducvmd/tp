@@ -1,13 +1,12 @@
 package seedu.address.model.person;
 
-import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
@@ -25,26 +24,21 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
-    private final ParentName parentName; // optional, may be null
+    private final Optional<ParentName> parentName;
 
     /**
-     * Every field must be present and not null. parentName defaults to null.
+     * Every field must be present and not null. parentName defaults to empty.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.tags.addAll(tags);
-        this.parentName = null;
+        this(name, phone, email, address, tags, Optional.empty());
     }
 
     /**
      * Constructor that includes an optional parentName.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, ParentName parentName) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+            Optional<ParentName> parentName) {
+        requireAllNonNull(name, phone, email, address, tags, parentName);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -81,7 +75,7 @@ public class Person {
      * Returns the parent name wrapped in an Optional, or empty if not set.
      */
     public Optional<ParentName> getParentName() {
-        return Optional.ofNullable(parentName);
+        return parentName;
     }
 
     /**
@@ -118,7 +112,7 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
-                && Objects.equals(parentName, otherPerson.parentName);
+                && parentName.equals(otherPerson.parentName);
     }
 
     @Override
@@ -135,7 +129,7 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
-                .add("parentName", parentName)
+                .add("parentName", parentName.orElse(null))
                 .toString();
     }
 
