@@ -1,11 +1,14 @@
 package seedu.address.testutil;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.ParentName;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -26,6 +29,8 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Set<Tag> tags;
+    private ParentName parentName;
+    private LocalDateTime appointmentStart;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -36,6 +41,8 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
+        parentName = null;
+        appointmentStart = null;
     }
 
     /**
@@ -47,6 +54,8 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
+        parentName = personToCopy.getParentName().orElse(null);
+        appointmentStart = personToCopy.getAppointmentStart().orElse(null);
     }
 
     /**
@@ -89,8 +98,28 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code ParentName} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withParentName(String name) {
+        this.parentName = new ParentName(name);
+        return this;
+    }
+
+    /**
+     * Sets the appointment start date-time of the {@code Person} that we are building.
+     */
+    public PersonBuilder withAppointmentStart(String appointmentStart) {
+        this.appointmentStart = LocalDateTime.parse(appointmentStart);
+        return this;
+    }
+
+    /**
+     * Builds a {@code Person} with the current builder state.
+     */
     public Person build() {
-        return new Person(name, phone, email, address, tags);
+        return new Person(name, phone, email, address, tags, Optional.ofNullable(parentName),
+                Optional.ofNullable(appointmentStart));
     }
 
 }

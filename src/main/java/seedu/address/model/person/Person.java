@@ -2,9 +2,11 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -24,17 +26,29 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final Optional<LocalDateTime> appointmentStart;
+    private final Optional<ParentName> parentName;
+
+    /**
+     * Every field must be present and not null. parentName defaults to empty.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+        this(name, phone, email, address, tags, Optional.empty(), Optional.empty());
+    }
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Optional<ParentName> parentName,
+            Optional<LocalDateTime> appointmentStart) {
+        requireAllNonNull(name, phone, email, address, tags, parentName, appointmentStart);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.parentName = parentName;
+        this.appointmentStart = appointmentStart;
     }
 
     public Name getName() {
@@ -53,12 +67,23 @@ public class Person {
         return address;
     }
 
+    public Optional<LocalDateTime> getAppointmentStart() {
+        return appointmentStart;
+    }
+
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
     public Set<Tag> getTags() {
         return Collections.unmodifiableSet(tags);
+    }
+
+    /**
+     * Returns the parent name wrapped in an Optional, or empty if not set.
+     */
+    public Optional<ParentName> getParentName() {
+        return parentName;
     }
 
     /**
@@ -94,13 +119,16 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags);
+                && tags.equals(otherPerson.tags)
+                && parentName.equals(otherPerson.parentName)
+                && appointmentStart.equals(otherPerson.appointmentStart);
+
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, phone, email, address, tags, parentName, appointmentStart);
     }
 
     @Override
@@ -111,6 +139,8 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("parentName", parentName.orElse(null))
+                .add("appointmentStart", appointmentStart)
                 .toString();
     }
 

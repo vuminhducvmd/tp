@@ -1,8 +1,13 @@
 package seedu.address.storage;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,6 +18,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.ParentName;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -23,11 +29,17 @@ import seedu.address.model.tag.Tag;
 class JsonAdaptedPerson {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Person's %s field is missing!";
+    private static final String APPOINTMENT_START_MESSAGE_CONSTRAINTS =
+            "Appointment start date-time must be in ISO 8601 local format, e.g. 2026-01-13T08:00:00";
+    private static final DateTimeFormatter APPOINTMENT_START_FORMATTER =
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME.withResolverStyle(ResolverStyle.STRICT);
 
     private final String name;
     private final String phone;
     private final String email;
     private final String address;
+    private final String appointmentStart;
+    private final String parentName; // optional, may be null
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
@@ -36,11 +48,15 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+            @JsonProperty("parentName") String parentName,
+            @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("appointmentStart") String appointmentStart) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.parentName = parentName;
+        this.appointmentStart = appointmentStart;
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -54,9 +70,13 @@ class JsonAdaptedPerson {
         phone = source.getPhone().value;
         email = source.getEmail().value;
         address = source.getAddress().value;
+        appointmentStart = source.getAppointmentStart()
+                .map(value -> value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .orElse(null);
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
+        parentName = source.getParentName().map(pn -> pn.fullName).orElse(null);
     }
 
     /**
@@ -102,8 +122,27 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
+        LocalDateTime modelAppointmentStart = null;
+        if (appointmentStart != null) {
+            try {
+                modelAppointmentStart = LocalDateTime.parse(appointmentStart, APPOINTMENT_START_FORMATTER);
+            } catch (DateTimeParseException e) {
+                throw new IllegalValueException(APPOINTMENT_START_MESSAGE_CONSTRAINTS);
+            }
+        }
+
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags);
+
+        ParentName modelParentName = null;
+        if (parentName != null) {
+            if (!Name.isValidName(parentName)) {
+                throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+            }
+            modelParentName = new ParentName(parentName);
+        }
+
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags,
+                Optional.ofNullable(modelParentName), Optional.ofNullable(modelAppointmentStart));
     }
 
 }
