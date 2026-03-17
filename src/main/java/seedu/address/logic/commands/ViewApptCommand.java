@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.ListDisplayMode;
 import seedu.address.model.Model;
 import seedu.address.model.person.AppointmentInWeekPredicate;
 
@@ -47,11 +48,12 @@ public class ViewApptCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
+        model.setListDisplayMode(ListDisplayMode.APPOINTMENT);
 
         String weekStart = predicate.getWeekStart().format(DateTimeFormatter.ISO_LOCAL_DATE);
         String weekEnd = predicate.getWeekEnd().format(DateTimeFormatter.ISO_LOCAL_DATE);
         String feedback = String.format(MESSAGE_SUCCESS, model.getFilteredPersonList().size(), weekStart, weekEnd);
-        return new CommandResult(feedback, false, false, true);
+        return new CommandResult(feedback);
     }
 
     @Override
