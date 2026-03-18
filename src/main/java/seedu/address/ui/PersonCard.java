@@ -72,7 +72,7 @@ public class PersonCard extends UiPart<Region> {
         String lastAttendanceValue = person.getLastAttendance()
             .map(value -> value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
             .orElse("-");
-        lastAttendance.setText("Attendance: " + lastAttendanceValue);
+        lastAttendance.setText("Last Attendance: " + lastAttendanceValue);
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
