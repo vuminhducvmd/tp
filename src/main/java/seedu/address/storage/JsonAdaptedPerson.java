@@ -20,6 +20,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.ParentName;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonBuilder;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 
@@ -158,8 +159,11 @@ class JsonAdaptedPerson {
             modelParentName = new ParentName(parentName);
         }
 
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags,
-                Optional.ofNullable(modelParentName), Optional.ofNullable(modelAppointmentStart));
+        return new PersonBuilder(modelName, modelPhone, modelEmail, modelAddress, modelTags)
+            .withParentName(Optional.ofNullable(modelParentName))
+            .withAppointmentStart(Optional.ofNullable(modelAppointmentStart))
+            .withLastAttendance(Optional.ofNullable(modelLastAttendance))
+            .build();
     }
 
 }
