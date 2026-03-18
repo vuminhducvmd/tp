@@ -27,21 +27,24 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final Optional<LocalDateTime> appointmentStart;
+    private final Optional<LocalDateTime> lastAttendance;
     private final Optional<ParentName> parentName;
 
     /**
-     * Every field must be present and not null. parentName defaults to empty.
+     * Every field must be present and not null.
+     * Fields other than personal details (name, phone, email, and address)
+     * are optional and can be empty.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        this(name, phone, email, address, tags, Optional.empty(), Optional.empty());
+        this(name, phone, email, address, tags, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     /**
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Optional<ParentName> parentName,
-            Optional<LocalDateTime> appointmentStart) {
-        requireAllNonNull(name, phone, email, address, tags, parentName, appointmentStart);
+            Optional<LocalDateTime> appointmentStart, Optional<LocalDateTime> lastAttendance) {
+        requireAllNonNull(name, phone, email, address, tags, parentName, appointmentStart, lastAttendance);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -49,6 +52,7 @@ public class Person {
         this.tags.addAll(tags);
         this.parentName = parentName;
         this.appointmentStart = appointmentStart;
+        this.lastAttendance = lastAttendance;
     }
 
     public Name getName() {
@@ -69,6 +73,13 @@ public class Person {
 
     public Optional<LocalDateTime> getAppointmentStart() {
         return appointmentStart;
+    }
+
+    /**
+     * Returns the last attendance date-time wrapped in an Optional, or empty if not set.
+     */
+    public Optional<LocalDateTime> getLastAttendance() {
+        return lastAttendance;
     }
 
     /**
@@ -121,14 +132,15 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
                 && parentName.equals(otherPerson.parentName)
-                && appointmentStart.equals(otherPerson.appointmentStart);
+                && appointmentStart.equals(otherPerson.appointmentStart)
+                && lastAttendance.equals(otherPerson.lastAttendance);
 
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, parentName, appointmentStart);
+        return Objects.hash(name, phone, email, address, tags, parentName, appointmentStart, lastAttendance);
     }
 
     @Override
@@ -141,6 +153,7 @@ public class Person {
                 .add("tags", tags)
                 .add("parentName", parentName.orElse(null))
                 .add("appointmentStart", appointmentStart)
+                .add("lastAttendance", lastAttendance)
                 .toString();
     }
 
