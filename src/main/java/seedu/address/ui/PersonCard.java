@@ -42,6 +42,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label appointmentStart;
     @FXML
+    private Label paymentDate;
+    @FXML
     private Label lastAttendance;
     @FXML
     private FlowPane tags;
@@ -63,6 +65,10 @@ public class PersonCard extends UiPart<Region> {
                 .map(value -> value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .orElse("-");
         appointmentStart.setText("Start: " + appointmentStartValue);
+        String paymentDateValue = person.getPaymentDate()
+                .map(value -> value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .orElse("-");
+        paymentDate.setText("Payment made on: " + paymentDateValue);
         String lastAttendanceValue = person.getLastAttendance()
             .map(value -> value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
             .orElse("-");

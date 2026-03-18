@@ -31,6 +31,7 @@ public class PersonBuilder {
     private Set<Tag> tags;
     private ParentName parentName;
     private LocalDateTime appointmentStart;
+    private LocalDateTime paymentDate;
     private LocalDateTime lastAttendance;
 
     /**
@@ -44,6 +45,7 @@ public class PersonBuilder {
         tags = new HashSet<>();
         parentName = null;
         appointmentStart = null;
+        paymentDate = null;
         lastAttendance = null;
     }
 
@@ -59,6 +61,7 @@ public class PersonBuilder {
         parentName = personToCopy.getParentName().orElse(null);
         appointmentStart = personToCopy.getAppointmentStart().orElse(null);
         lastAttendance = personToCopy.getLastAttendance().orElse(null);
+        paymentDate = personToCopy.getPaymentDate().orElse(null);
     }
 
     /**
@@ -126,11 +129,22 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the appointment start date-time of the {@code Person} that we are building.
+     */
+    public PersonBuilder withPaymentDate(String paymentDate) {
+        this.paymentDate = LocalDateTime.parse(paymentDate);
+        return this;
+    }
+
+    /**
      * Builds a {@code Person} with the current builder state.
      */
     public Person build() {
-        return new Person(name, phone, email, address, tags, Optional.ofNullable(parentName),
-                Optional.ofNullable(appointmentStart), Optional.ofNullable(lastAttendance));
+        return new Person(name, phone, email, address, tags,
+                Optional.ofNullable(parentName),
+                Optional.ofNullable(appointmentStart),
+                Optional.ofNullable(paymentDate),
+                Optional.ofNullable(lastAttendance));
     }
 
 }

@@ -93,6 +93,10 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withAppointmentStart("2026-01-13T08:00:00").build();
         assertFalse(ALICE.equals(editedAlice));
 
+        // different payment date -> returns false
+        editedAlice = new PersonBuilder(ALICE).withPaymentDate("2026-01-13T08:00:00").build();
+        assertFalse(ALICE.equals(editedAlice));
+
         // different last attendance -> returns false
         editedAlice = new PersonBuilder(ALICE).withLastAttendance("2026-01-29T08:00:00").build();
         assertFalse(ALICE.equals(editedAlice));
@@ -104,6 +108,7 @@ public class PersonTest {
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags()
                 + ", parentName=" + ALICE.getParentName().orElse(null)
                 + ", appointmentStart=" + ALICE.getAppointmentStart()
+                + ", paymentDate=" + ALICE.getPaymentDate()
                 + ", lastAttendance=" + ALICE.getLastAttendance() + "}";
         assertEquals(expected, ALICE.toString());
     }

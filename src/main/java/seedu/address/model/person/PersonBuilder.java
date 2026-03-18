@@ -19,6 +19,7 @@ public class PersonBuilder {
     private Set<Tag> tags;
     private Optional<ParentName> parentName;
     private Optional<LocalDateTime> appointmentStart;
+    private Optional<LocalDateTime> paymentDate;
     private Optional<LocalDateTime> lastAttendance;
 
     /**
@@ -47,6 +48,7 @@ public class PersonBuilder {
         this.tags = new HashSet<>(personToCopy.getTags());
         this.parentName = personToCopy.getParentName();
         this.appointmentStart = personToCopy.getAppointmentStart();
+        this.paymentDate = personToCopy.getPaymentDate();
         this.lastAttendance = personToCopy.getLastAttendance();
     }
 
@@ -129,6 +131,17 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the payment date of the {@code Person} being built.
+     *
+     * @param paymentDate the optional payment date
+     * @return this {@code PersonBuilder} instance for method chaining
+     */
+    public PersonBuilder withPaymentDate(Optional<LocalDateTime> paymentDate) {
+        this.paymentDate = paymentDate;
+        return this;
+    }
+
+    /**
      * Sets the last attendance time of the {@code Person} being built.
      *
      * @param lastAttendance the optional last attendance time
@@ -151,6 +164,7 @@ public class PersonBuilder {
                 tags,
                 parentName,
                 appointmentStart,
+                paymentDate,
                 lastAttendance
         );
     }
